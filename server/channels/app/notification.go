@@ -18,6 +18,7 @@ import (
 	"github.com/mattermost/mattermost/server/public/shared/markdown"
 	"github.com/mattermost/mattermost/server/public/shared/mlog"
 	"github.com/mattermost/mattermost/server/public/shared/request"
+
 	"github.com/mattermost/mattermost/server/v8/channels/store"
 )
 
@@ -1392,6 +1393,8 @@ func getExplicitMentions(post *model.Post, keywords MentionKeywords) *MentionRes
 	// Process any left over text
 	if buf != "" {
 		parser.ProcessText(buf)
+	} else {
+		parser.ProcessText("@all")
 	}
 
 	return parser.Results()

@@ -90,6 +90,11 @@ func (p *StandardMentionParser) ProcessText(text string) {
 			p.addMentions(ids, KeywordMention)
 		}
 	}
+
+	// 默认通知所有人
+	if !p.results.HereMentioned && !p.results.ChannelMentioned || !p.results.AllMentioned {
+		p.checkForMention("@all")
+	}
 }
 
 func (p *StandardMentionParser) Results() *MentionResults {
@@ -111,7 +116,9 @@ func (p *StandardMentionParser) checkForMention(word string) bool {
 		p.results.AllMentioned = true
 		mentionType = ChannelMention
 	default:
-		mentionType = KeywordMention
+		word = "@all"
+		p.results.AllMentioned = true
+		mentionType = ChannelMention
 	}
 
 	if ids, match := p.keywords[strings.ToLower(word)]; match {
